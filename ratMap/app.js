@@ -140,6 +140,12 @@ const parseMyData = (results) => {
 // }
 
 const makeBoroughDateCountTable = (arr) =>{
+    let sum = 0
+    for (let i=0; i<arr.length; i++){
+        sum += arr[i].count;
+    }
+    let $stats = $('<h3>').text(`There are a total of ${sum} Rat Sightings`)
+    $('.container').append($stats);
     let $table = $('<table>');
     $table.html(
         `<thead>
