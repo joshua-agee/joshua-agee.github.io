@@ -26,7 +26,7 @@ const getData = () =>{
     }).then(function(data) {
         return new Promise (function (resolve, reject) {
             parseMyData(data);
-            resolve (console.log(boroughDateArr));
+            resolve (makeBoroughDateTable(boroughDateArr));
         });
         // console.log("Retrieved " + data.length + " records from the dataset!");
         // results = data;
@@ -58,13 +58,50 @@ const getData = () =>{
 const parseMyData = (results) => {
     let parsedData = [];
     for (let i=0; i<results.length; i++){
-        parsedData.push([results[i].borough, results[i].created_date.slice(0,10)]);
+        parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
         boroughDateArr = parsedData;
         //console.log(parsedData)
     }
 }
 
 //a function to append the data to the body
+//sample code from w3d3 lessons
+// const buildTable = () => {
+//     const $infoTable = $('<table>').addClass('info-table')
+//     $infoTable.html(
+//       `<thead>
+//         <tr>
+//           <th>Name</th>
+//           <th>Location</th>
+//         </tr>
+//       </thead>`
+//     )
+//     for (let contact of contacts) {
+//       console.log(contact)
+//     }
+//   }
+//   $(() => {
+//     buildTable()
+//   })
+const makeBoroughDateTable = (arr) => {
+    let $table = $('<table>');
+    $table.html(
+        `<thead>
+//         <tr>
+//           <th>Borough</th>
+//           <th>Date</th>
+//         </tr>
+//       </thead>`
+    );
+    for (event of arr) {
+        const $row = $('<tr>');
+        const $boroughCell = $('<td>').text(event.borough);
+        const $dateCell = $('<td>').text(event.date);
+        $row.append($boroughCell, $dateCell);
+        $table.append($row);
+    }
+    $('.container').append($table);
+}
 
 $(()=>{
     getData();
