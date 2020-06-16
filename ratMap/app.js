@@ -12,6 +12,7 @@ const theBoroughs = [
 let borough = theBoroughs[0];
 let results;
 let boroughDateArr;
+let boroughDateCount = [];
 
 //This call returns data on rat sightings between 2/2/20 and 6/15/20
 const getData = () =>{
@@ -24,9 +25,12 @@ const getData = () =>{
             "$$app_token" : ratMapAppToken
         }
     }).then(function(data) {
-        return new Promise (function (resolve, reject) {
+        return new Promise (function (resolve) {
             parseMyData(data);
-            resolve (makeBoroughDateTable(boroughDateArr));
+            resolve (
+                makeBoroughDateCountTable(boroughDateCount)
+                //console.log(boroughDateCount)
+            );
         });
         // console.log("Retrieved " + data.length + " records from the dataset!");
         // results = data;
@@ -58,10 +62,11 @@ const getData = () =>{
 const parseMyData = (results) => {
     let parsedData = [];
     for (let i=0; i<results.length; i++){
+        //extract the borough name and date for each row into an arr of objects.
         parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
         boroughDateArr = parsedData;
         //sort data by date
-        boroughDateArr.sort(function (a,b){
+        boroughDateArr = boroughDateArr.sort(function (a,b){
             if (a.date < b.date){
                 return -1;
             }
@@ -70,7 +75,17 @@ const parseMyData = (results) => {
             }
             return 0;
         });
-        //console.log(parsedData)
+        //create a count by date array
+    }
+    let counter = 1;
+    for (let i=0; i<boroughDateArr.length-1; i++){
+        //debugger;
+        if (boroughDateArr[i].name === boroughDateArr[i+1].name && boroughDateArr[i].date === boroughDateArr[i+1].date){
+            counter++;
+        } else {
+            boroughDateCount.push({borough: boroughDateArr[i].borough, date: boroughDateArr[i].date, count: counter });
+            counter = 1;
+        }
     }
 }
 
@@ -113,6 +128,27 @@ const makeBoroughDateTable = (arr) => {
     $('.container').append($table);
 }
 
+const makeBoroughDateCountTable = (arr) =>{
+    let $table = $('<table>');
+    $table.html(
+        `<thead>
+//         <tr>
+//           <th>Borough</th>
+//           <th>Date</th>
+//           <th>Count</th>
+//         </tr>
+//       </thead>`
+    );
+    for (event of arr) {
+        const $row = $('<tr>');
+        const $boroughCell = $('<td>').text(event.borough);
+        const $dateCell = $('<td>').text(event.date);
+        const $countCell = $('<td>').text(event.count);
+        $row.append($boroughCell, $dateCell, $countCell);
+        $table.append($row);
+    }
+    $('.container').append($table);
+}
 $(()=>{
     getData();
     
