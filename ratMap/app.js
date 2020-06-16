@@ -60,6 +60,16 @@ const parseMyData = (results) => {
     for (let i=0; i<results.length; i++){
         parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
         boroughDateArr = parsedData;
+        //sort data by date
+        boroughDateArr.sort(function (a,b){
+            if (a.date < b.date){
+                return -1;
+            }
+            if (a.date > b.date){
+                return 1;
+            }
+            return 0;
+        });
         //console.log(parsedData)
     }
 }
