@@ -17,7 +17,7 @@ let boroughDateCount = [];
 //This call returns data on rat sightings between 2/2/20 and 6/15/20
 const getData = () =>{
     $.ajax({
-        url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting&borough=MANHATTAN",
+        url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting",
         type: "GET",
         data: {
             "$where" : "created_date between '2020-01-01T00:00:00' and '2020-06-15T23:59:00'",
@@ -65,22 +65,32 @@ const parseMyData = (results) => {
         //extract the borough name and date for each row into an arr of objects.
         parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
         boroughDateArr = parsedData;
-        //sort data by date
-        boroughDateArr = boroughDateArr.sort(function (a,b){
-            if (a.date < b.date){
-                return -1;
-            }
-            if (a.date > b.date){
-                return 1;
-            }
-            return 0;
-        });
-        //create a count by date array
     }
+    //sort by borough
+    boroughDateArr = boroughDateArr.sort(function(a,b){
+        if (a.borough < b.borough){
+            return -1;
+        }
+        if (a.borough > b.borough){
+            return 1;
+        }
+        return 0;
+    });
+    //sort data by date
+    boroughDateArr = boroughDateArr.sort(function (a,b){
+        if (a.date < b.date){
+            return -1;
+        }
+        if (a.date > b.date){
+            return 1;
+        }
+        return 0;
+    });
+    //create a count by date array
     let counter = 1;
     for (let i=0; i<boroughDateArr.length-1; i++){
-        //debugger;
-        if (boroughDateArr[i].name === boroughDateArr[i+1].name && boroughDateArr[i].date === boroughDateArr[i+1].date){
+        debugger;
+        if (boroughDateArr[i].borough === boroughDateArr[i+1].borough && boroughDateArr[i].date === boroughDateArr[i+1].date){
             counter++;
         } else {
             boroughDateCount.push({borough: boroughDateArr[i].borough, date: boroughDateArr[i].date, count: counter });
