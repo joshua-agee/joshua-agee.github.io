@@ -11,8 +11,6 @@ const theBoroughs = [
 ]
 let borough = theBoroughs[0];
 let results;
-let boroughDateArr;
-let boroughDateCount = [];
 
 //This call returns data on rat sightings between given dates
 const getData = (startDate , endDate = '2020-06-15') =>{
@@ -26,41 +24,43 @@ const getData = (startDate , endDate = '2020-06-15') =>{
         }
     }).then(function(data) {
         return new Promise (function (resolve) {
-            parseMyData(data);
+            let boroughDateCount = parseMyData(data);
             resolve (
                 makeBoroughDateCountTable(boroughDateCount)
                 //console.log(boroughDateCount)
-            );
-        });
-        // console.log("Retrieved " + data.length + " records from the dataset!");
-        // results = data;
-        //console.log(results);
-        //boroughDateArr = parseMyData(results);
-    }), (error) => {
-        console.log(error);
-    };
+                );
+            });
+            // console.log("Retrieved " + data.length + " records from the dataset!");
+            // results = data;
+            //console.log(results);
+            //boroughDateArr = parseMyData(results);
+        }), (error) => {
+            console.log(error);
+        };
 }
-// this function will parse the data to get call counts by day
-// data is array of objects with following keys of interest :
-// borough: "QUEENS"
-// city: "MASPETH"
-// community_board: "05 QUEENS"
-// complaint_type: "Rodent"
-// created_date: "2020-04-28T22:58:29.000"
-// cross_street_1: "58 STREET"
-// cross_street_2: "58 PLACE"
-// descriptor: "Rat Sighting"
-// incident_address: "58-09 MASPETH AVENUE"
-// landmark: "MASPETH AVENUE"
-// latitude: "40.72308983950738"
-// latitude: "40.72308983950738"​
-// longitude: "-73.91165819809213"​
-//================================
-// output data to array of borough and date - no time - date object?
-// [["queens", "2020-04-28"], ["bronx", ]
-
+    // this function will parse the data to get call counts by day
+    // data is array of objects with following keys of interest :
+    // borough: "QUEENS"
+    // city: "MASPETH"
+    // community_board: "05 QUEENS"
+    // complaint_type: "Rodent"
+    // created_date: "2020-04-28T22:58:29.000"
+    // cross_street_1: "58 STREET"
+    // cross_street_2: "58 PLACE"
+    // descriptor: "Rat Sighting"
+    // incident_address: "58-09 MASPETH AVENUE"
+    // landmark: "MASPETH AVENUE"
+    // latitude: "40.72308983950738"
+    // latitude: "40.72308983950738"​
+    // longitude: "-73.91165819809213"​
+    //================================
+    // output data to array of borough and date - no time - date object?
+    // [["queens", "2020-04-28"], ["bronx", ]
+    
 const parseMyData = (results) => {
     let parsedData = [];
+    let boroughDateArr;
+    let boroughDateCount = [];
     for (let i=0; i<results.length; i++){
         //extract the borough name and date for each row into an arr of objects.
         parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
@@ -96,6 +96,7 @@ const parseMyData = (results) => {
             counter = 1;
         }
     }
+    return boroughDateCount;
 }
 
 //a function to append the data to the body
@@ -117,26 +118,26 @@ const parseMyData = (results) => {
 //   $(() => {
 //     buildTable()
 //   })
-const makeBoroughDateTable = (arr) => {
-    $('.container').empty();
-    let $table = $('<table>');
-    $table.html(
-        `<thead>
-//         <tr>
-//           <th>Borough</th>
-//           <th>Date</th>
-//         </tr>
-//       </thead>`
-    );
-    for (event of arr) {
-        const $row = $('<tr>');
-        const $boroughCell = $('<td>').text(event.borough);
-        const $dateCell = $('<td>').text(event.date);
-        $row.append($boroughCell, $dateCell);
-        $table.append($row);
-    }
-    $('.container').append($table);
-}
+// const makeBoroughDateTable = (arr) => {
+//     $('.container').empty();
+//     let $table = $('<table>');
+//     $table.html(
+//         `<thead>
+// //         <tr>
+// //           <th>Borough</th>
+// //           <th>Date</th>
+// //         </tr>
+// //       </thead>`
+//     );
+//     for (event of arr) {
+//         const $row = $('<tr>');
+//         const $boroughCell = $('<td>').text(event.borough);
+//         const $dateCell = $('<td>').text(event.date);
+//         $row.append($boroughCell, $dateCell);
+//         $table.append($row);
+//     }
+//     $('.container').append($table);
+// }
 
 const makeBoroughDateCountTable = (arr) =>{
     let $table = $('<table>');
@@ -161,8 +162,8 @@ const makeBoroughDateCountTable = (arr) =>{
 }
 $(()=>{
     $('#submit').on('click', ()=>{
-        console.log($('#startDate').val());
-        console.log($('#endDate').val());
+        //console.log($('#startDate').val());
+        //console.log($('#endDate').val());
         $('.container').empty();
         getData($('#startDate').val(), $('#endDate').val());
     })
