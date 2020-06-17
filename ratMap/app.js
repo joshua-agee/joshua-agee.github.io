@@ -13,7 +13,7 @@ let borough = theBoroughs[0];
 let results;
 
 //This call returns data on rat sightings between given dates
-const getData = (startDate , endDate = '2020-06-15') =>{
+const getData = (startDate , endDate) =>{
     $.ajax({
         url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting",
         type: "GET",
@@ -24,6 +24,7 @@ const getData = (startDate , endDate = '2020-06-15') =>{
         }
     }).then(function(data) {
         return new Promise (function (resolve) {
+            results = data; //stash data for table re-render without new ajax call
             let boroughDateCount = parseMyData(data);
             resolve (
                 makeBoroughDateCountTable(boroughDateCount)
@@ -156,24 +157,30 @@ const makeBoroughDateCountTable = (arr) =>{
 //         </tr>
 //       </thead>`
     );
-    for (event of arr) {
+    for (let call of arr) {
         const $row = $('<tr>');
-        const $boroughCell = $('<td>').text(event.borough);
-        const $dateCell = $('<td>').text(event.date);
-        const $countCell = $('<td>').text(event.count);
+        const $boroughCell = $('<td>').text(call.borough);
+        const $dateCell = $('<td>').text(call.date);
+        const $countCell = $('<td>').text(call.count);
         $row.append($boroughCell, $dateCell, $countCell);
         $table.append($row);
     }
     $('.container').append($table);
 }
 $(()=>{
-    $('#submit').on('click', ()=>{
+    $('.borough').on('click', (event)=>{
+        console.log($(event.currentTarget).attr('id'));
+        console.log(event);
+        
+    })
+    $('#submit').on('click', (event)=>{
         //console.log($('#startDate').val());
         //console.log($('#endDate').val());
         $('.container').empty();
         getData($('#startDate').val(), $('#endDate').val());
+        event.stopPropagation();
+        event.preventDefault();
     })
-    
     
 })
 
