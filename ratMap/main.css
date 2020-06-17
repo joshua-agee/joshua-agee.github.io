@@ -24,8 +24,19 @@ h3 {
     padding: .5rem;
     
 }
-
-
+label{
+    margin: .5rem;
+}
+label #text{
+    vertical-align: middle;
+}
+input{
+    margin: .5rem;
+}
+button{
+    height: fit-content;
+    font-weight: 700;
+}
 .filter {
     display: flex;
     flex-direction: row;
