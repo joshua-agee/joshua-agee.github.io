@@ -1,0 +1,83 @@
+/* style sheet derived from w3d3 jquery table lesson as a starting point */
+
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&display=swap');
+
+/***********************************
+* GENERAL
+************************************/
+body {
+    font-family: 'Libre Franklin', sans-serif;
+    background: rgb(207, 231, 247);
+}
+h1 {
+    text-align: center;
+}
+h3 {
+    text-align: center;
+}
+
+.dateRange {
+    display: flex;
+    justify-content: center;
+    margin: .5rem;
+    padding: .5rem;
+    
+}
+
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: 1px solid darkgray;
+}
+
+div .borough {
+    flex-basis: content;
+    background: rgb(224, 224, 224);
+    margin: 15px;
+    padding: 10px;
+    font-weight: 700;
+    border: 1px solid darkgray;
+}
+/***********************************
+* TABLE
+************************************/
+table {
+    background-color: rgb(230, 246, 253);
+    margin: 1em auto;
+    width: 70%;
+    border-spacing: 0;
+}
+
+tr {
+    border-bottom: 2px solid grey;
+}
+td, th {
+    border-bottom: 1px solid grey;
+    padding: .5em;
+}
+
+th {
+    font-size: 1.5em;
+    background: rgb(181, 238, 255);
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background: rgb(213, 252, 255);
+}
+
+tr:hover {
+    background: rgb(205, 243, 255);
+    color: steelblue;
+}
+
+.address {
+    text-align: center;
+}
+
+.black {
+    background-color: black;
+}
