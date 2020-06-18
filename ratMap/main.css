@@ -30,7 +30,7 @@ label{
 label #text{
     vertical-align: middle;
 }
-input{
+ input{
     margin: .5rem;
 }
 button{
@@ -39,7 +39,7 @@ button{
 }
 .filter {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
     border: 1px solid darkgray;
 }
@@ -48,11 +48,11 @@ button{
 div .borough {
     flex-basis: content;
     background: rgb(224, 224, 224);
-    margin: 15px;
-    padding: 10px;
+    margin: 5px;
+    padding: 5px;
     font-weight: 700;
     border: 1px solid darkgray;
-}
+} 
 /***********************************
 * TABLE
 ************************************/
@@ -86,10 +86,28 @@ tr:hover {
     color: steelblue;
 }
 
-.address {
-    text-align: center;
-}
-
-.black {
-    background-color: black;
+@media (min-width: 600px){
+    input{
+        margin: .5rem;
+    }
+    button{
+        height: fit-content;
+        font-weight: 700;
+    }
+    .filter {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        border: 1px solid darkgray;
+    }
+    
+    
+    div .borough {
+        flex-basis: content;
+        background: rgb(224, 224, 224);
+        margin: 15px;
+        padding: 10px;
+        font-weight: 700;
+        border: 1px solid darkgray;
+    }
 }
