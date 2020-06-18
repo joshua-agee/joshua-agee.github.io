@@ -35,7 +35,7 @@ label #text{
 }
 input{
     margin: .5rem;
-    height: 2rem;
+    height: 1rem;
 }
 button{
     font-weight: 700;
@@ -45,7 +45,8 @@ button{
 }
 .filter {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
     border: 1px solid darkgray;
@@ -81,7 +82,7 @@ td, th {
 }
 
 th {
-    font-size: 1.5em;
+    font-size: 1em;
     background: rgb(181, 238, 255);
     text-align: left;
 }
@@ -125,5 +126,34 @@ tr:hover {
         padding: 10px;
         font-weight: 700;
         border: 1px solid darkgray;
+    }
+    table {
+        background-color: rgb(230, 246, 253);
+        margin: 1em auto;
+        width: 70%;
+        border-spacing: 0;
+    }
+    
+    tr {
+        border-bottom: 2px solid grey;
+    }
+    td, th {
+        border-bottom: 1px solid grey;
+        padding: .5em;
+    }
+    
+    th {
+        font-size: 1.5em;
+        background: rgb(181, 238, 255);
+        text-align: left;
+    }
+    
+    tr:nth-child(even) {
+        background: rgb(213, 252, 255);
+    }
+    
+    tr:hover {
+        background: rgb(205, 243, 255);
+        color: steelblue;
     }
 }
