@@ -3,11 +3,11 @@ const baseURL = `https://data.cityofnewyork.us/resource/erm2-nwe9.json`;
 const ratMapAppToken = `uLbsfv6dXywYNOLKuYOyZ0rEb`
 
 const theBoroughs = [
-    'MANHATTAN',
+    'BRONX',
     'BROOKLYN',
+    'MANHATTAN',
     'QUEENS',
     "'STATEN ISLAND'",
-    'BRONX',
 ]
 let borough = theBoroughs[0];
 let results;
@@ -178,8 +178,8 @@ $(()=>{
         //console.log($('#endDate').val());
         $('.container').empty();
         getData($('#startDate').val(), $('#endDate').val());
-        event.stopPropagation();
-        event.preventDefault();
+        // event.stopPropagation();
+        // event.preventDefault();
     })
     
 })
