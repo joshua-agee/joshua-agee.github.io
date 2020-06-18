@@ -95,6 +95,15 @@ tr:hover {
     background: rgb(205, 243, 255);
     color: steelblue;
 }
+/***********************************
+* MAP
+************************************/
+#map-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 @media (min-width: 600px){
     .dateRange {
