@@ -12,32 +12,59 @@ const theBoroughs = [
 let borough = theBoroughs[0];
 let results;
 
-//This call returns data on rat sightings between given dates
-const getData = (startDate , endDate) =>{
-    $.ajax({
-        url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting",
-        type: "GET",
-        data: {
-            "$where" : `created_date between '${startDate}T00:00:00' and '${endDate}T23:59:00'`,
-            "$limit" : 50000,
-            "$$app_token" : ratMapAppToken
-        }
-    }).then(function(data) {
-        return new Promise (function (resolve) {
-            results = data; //stash data for table re-render without new ajax call
-            let boroughDateCount = parseMyData(data);
-            resolve (
-                makeBoroughDateCountTable(boroughDateCount)
-                //console.log(boroughDateCount)
-                );
-            });
-            // console.log("Retrieved " + data.length + " records from the dataset!");
-            // results = data;
-            //console.log(results);
-            //boroughDateArr = parseMyData(results);
-        }), (error) => {
-            console.log(error);
-        };
+//This call returns data on rat sightings between given dates with optional borough id parameter
+const getData = (...args) =>{
+    if (args.length == 2){
+        $.ajax({
+            url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting",
+            type: "GET",
+            data: {
+                "$where" : `created_date between '${args[0]}T00:00:00' and '${args[1]}T23:59:00'`,
+                "$limit" : 50000,
+                "$$app_token" : ratMapAppToken
+            }
+        }).then(function(data) {
+            return new Promise (function (resolve) {
+                results = data; //stash data for table re-render without new ajax call
+                let boroughDateCount = parseMyData(data);
+                resolve (
+                    makeBoroughDateCountTable(boroughDateCount)
+                    //console.log(boroughDateCount)
+                    );
+                });
+                // console.log("Retrieved " + data.length + " records from the dataset!");
+                // results = data;
+                //console.log(results);
+                //boroughDateArr = parseMyData(results);
+            }), (error) => {
+                console.log(error);
+            };
+    } else if (args.length ==3){
+        $.ajax({
+            url: `https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting&borough=${theBoroughs[args[2]]}`,
+            type: "GET",
+            data: {
+                "$where" : `created_date between '${args[0]}T00:00:00' and '${args[1]}T23:59:00'`,
+                "$limit" : 50000,
+                "$$app_token" : ratMapAppToken
+            }
+        }).then(function(data) {
+            return new Promise (function (resolve) {
+                results = data; //stash data for table re-render without new ajax call
+                let boroughDateCount = parseMyData(data);
+                resolve (
+                    makeBoroughDateCountTable(boroughDateCount)
+                    //console.log(boroughDateCount)
+                    );
+                });
+                // console.log("Retrieved " + data.length + " records from the dataset!");
+                // results = data;
+                //console.log(results);
+                //boroughDateArr = parseMyData(results);
+            }), (error) => {
+                console.log(error);
+            };
+    }
 }
     // this function will parse the data to get call counts by day
     // data is array of objects with following keys of interest :
@@ -145,7 +172,7 @@ const makeBoroughDateCountTable = (arr) =>{
     for (let i=0; i<arr.length; i++){
         sum += arr[i].count;
     }
-    let $stats = $('<h3>').text(`There are a total of ${sum} Rat Sightings`)
+    let $stats = $('<h3>').text(`There are a total of ${sum} Rat Sightings for the given date range`)
     $('.container').append($stats);
     let $table = $('<table>');
     $table.html(
@@ -171,6 +198,10 @@ $(()=>{
     $('.borough').on('click', (event)=>{
         console.log($(event.currentTarget).attr('id'));
         console.log(event);
+        //re-query the api with the borough id passed as a variable
+        $('.container').empty();
+        getData($('#startDate').val(), $('#endDate').val(), $(event.currentTarget).attr('id'));
+
         
     })
     $('#submit').on('click', (event)=>{
