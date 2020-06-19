@@ -50,12 +50,17 @@
 
 const makeMap= () =>{
 //taken from mapbox documentation 
+        var bounds = [
+        [-74.04728500751165, 40.68392799015035], // Southwest coordinates
+        [-73.91058699000139, 40.87764500765852] // Northeast coordinates
+        ];
     mapboxgl.accessToken = 'pk.eyJ1Ijoiam9zaHVhLWFnZWUiLCJhIjoiY2tia3hrN2VkMTNxejMwb2RkM3RxN3MxcyJ9.1ddnA2a5TX6BAbcXQGINVw';
     let map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
         center: [-73.9, 40.66], // starting position [lng, lat]
-        zoom: 9 // starting zoom
+        zoom: 8, // starting zoom
+        //maxBounds: bounds // limiting view to New York
     });  
     
     map.on('load', function() {
