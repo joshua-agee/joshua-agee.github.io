@@ -1,7 +1,8 @@
+
 // This is the API location for NYC 311 data
 const baseURL = `https://data.cityofnewyork.us/resource/erm2-nwe9.json`;
 const ratMapAppToken = `uLbsfv6dXywYNOLKuYOyZ0rEb`
-
+const baseGeoJSONdataURL = `https://data.cityofnewyork.us/resource/erm2-nwe9.geojson?complaint_type=Rodent&descriptor=Rat%20Sighting&`
 const theBoroughs = [
     'BRONX',
     'BROOKLYN',
@@ -9,12 +10,14 @@ const theBoroughs = [
     'QUEENS',
     "'STATEN ISLAND'",
 ]
-let borough = theBoroughs[0];
 let results;
+let resultGeoJSON;
+let url = ""; //variable to pass to mapping function for geojson data
 
 //This call returns data on rat sightings between given dates with optional borough id parameter
 const getData = (...args) =>{
     if (args.length == 2){
+        url = baseGeoJSONdataURL+`%24where=created_Date%20between%20%27${args[0]}T00%3A00%3A00%27%20and%20%27${args[1]}T23%3A59%3A00%27&%24limit=50000&%24%24app_token=${ratMapAppToken}`;
         $.ajax({
             url: "https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting",
             type: "GET",
@@ -29,17 +32,16 @@ const getData = (...args) =>{
                 let boroughDateCount = parseMyData(data);
                 resolve (
                     makeBoroughDateCountTable(boroughDateCount)
-                    //console.log(boroughDateCount)
                     );
                 });
-                // console.log("Retrieved " + data.length + " records from the dataset!");
-                // results = data;
-                //console.log(results);
-                //boroughDateArr = parseMyData(results);
             }), (error) => {
                 console.log(error);
             };
-    } else if (args.length ==3){
+    } 
+
+ 
+    if (args.length == 3) {
+        url = baseGeoJSONdataURL+`borough=${theBoroughs[args[2]]}&%24where=created_Date%20between%20%27${args[0]}T00%3A00%3A00%27%20and%20%27${args[1]}T23%3A59%3A00%27&%24limit=50000&%24%24app_token=${ratMapAppToken}`;
         $.ajax({
             url: `https://data.cityofnewyork.us/resource/erm2-nwe9.json?complaint_type=Rodent&descriptor=Rat Sighting&borough=${theBoroughs[args[2]]}`,
             type: "GET",
@@ -56,11 +58,9 @@ const getData = (...args) =>{
                     makeBoroughDateCountTable(boroughDateCount)
                     //console.log(boroughDateCount)
                     );
+                    
                 });
-                // console.log("Retrieved " + data.length + " records from the dataset!");
-                // results = data;
-                //console.log(results);
-                //boroughDateArr = parseMyData(results);
+               
             }), (error) => {
                 console.log(error);
             };
@@ -69,20 +69,12 @@ const getData = (...args) =>{
     // this function will parse the data to get call counts by day
     // data is array of objects with following keys of interest :
     // borough: "QUEENS"
-    // city: "MASPETH"
-    // community_board: "05 QUEENS"
-    // complaint_type: "Rodent"
-    // created_date: "2020-04-28T22:58:29.000"
-    // cross_street_1: "58 STREET"
-    // cross_street_2: "58 PLACE"
-    // descriptor: "Rat Sighting"
-    // incident_address: "58-09 MASPETH AVENUE"
-    // landmark: "MASPETH AVENUE"
+    // 
     // latitude: "40.72308983950738"
     // latitude: "40.72308983950738"​
     // longitude: "-73.91165819809213"​
     //================================
-    // output data to array of borough and date - no time - date object?
+    // output data to array of borough, date, long and lat of call. 
     // [["queens", "2020-04-28"], ["bronx", ]
     
 const parseMyData = (results) => {
@@ -91,7 +83,7 @@ const parseMyData = (results) => {
     let boroughDateCount = [];
     for (let i=0; i<results.length; i++){
         //extract the borough name and date for each row into an arr of objects.
-        parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10)});
+        parsedData.push({borough: results[i].borough, date: results[i].created_date.slice(0,10), longitude: results[i].longitude, latitude: results[i].latitude});
         boroughDateArr = parsedData;
     }
     //sort by borough
@@ -124,48 +116,13 @@ const parseMyData = (results) => {
             counter = 1;
         }
     }
+    
     return boroughDateCount;
 }
 
 //a function to append the data to the body
 //sample code from w3d3 lessons
-// const buildTable = () => {
-//     const $infoTable = $('<table>').addClass('info-table')
-//     $infoTable.html(
-//       `<thead>
-//         <tr>
-//           <th>Name</th>
-//           <th>Location</th>
-//         </tr>
-//       </thead>`
-//     )
-//     for (let contact of contacts) {
-//       console.log(contact)
-//     }
-//   }
-//   $(() => {
-//     buildTable()
-//   })
-// const makeBoroughDateTable = (arr) => {
-//     $('.container').empty();
-//     let $table = $('<table>');
-//     $table.html(
-//         `<thead>
-// //         <tr>
-// //           <th>Borough</th>
-// //           <th>Date</th>
-// //         </tr>
-// //       </thead>`
-//     );
-//     for (event of arr) {
-//         const $row = $('<tr>');
-//         const $boroughCell = $('<td>').text(event.borough);
-//         const $dateCell = $('<td>').text(event.date);
-//         $row.append($boroughCell, $dateCell);
-//         $table.append($row);
-//     }
-//     $('.container').append($table);
-// }
+//this code builds the html table from the data in the array
 
 const makeBoroughDateCountTable = (arr) =>{
     let sum = 0
@@ -193,25 +150,16 @@ const makeBoroughDateCountTable = (arr) =>{
         $table.append($row);
     }
     $('.container').append($table);
+    
 }
-$(()=>{
-    $('.borough').on('click', (event)=>{
-        console.log($(event.currentTarget).attr('id'));
-        console.log(event);
-        //re-query the api with the borough id passed as a variable
-        $('.container').empty();
-        getData($('#startDate').val(), $('#endDate').val(), $(event.currentTarget).attr('id'));
 
-        
-    })
-    $('#submit').on('click', (event)=>{
-        //console.log($('#startDate').val());
-        //console.log($('#endDate').val());
-        $('.container').empty();
-        getData($('#startDate').val(), $('#endDate').val());
-        // event.stopPropagation();
-        // event.preventDefault();
-    })
+
+
+//on load set event listeners
+$(()=>{
+    //moved to index. for proper map loading.
+    
+    
     
 })
 
