@@ -21,7 +21,7 @@
         </label>
         <button type="button" id="submit">Submit (All Boroughs)</button>
     </form>
-    <span><h3>Filter by borough</h3></span>
+    <span><h3>Filter results by borough</h3></span>
     <div class="filter">
         <div class="borough" id="0">Bronx</div>
         <div class="borough" id="1">Brooklyn</div>
@@ -44,7 +44,7 @@
         } else { alert('Please select a start and end date');}
     })
     $('.borough').on('click', (event)=>{
-        //re-query the api with the borough id passed as a variable
+        //re-query the api with the borough id passed as a variable if not empty date values
         if ($('#startDate').val() != "" && $('#endDate').val() !=""){
             $('.container').empty();
             getData($('#startDate').val(), $('#endDate').val(), $(event.currentTarget).attr('id'));

@@ -129,7 +129,7 @@ const makeBoroughDateCountTable = (arr) =>{
     for (let i=0; i<arr.length; i++){
         sum += arr[i].count;
     }
-    let $stats = $('<h3>').text(`There are a total of ${sum} Rat Sightings for the given date range`)
+    let $stats = $('<h3>').text(`There are a total of ${sum} Rodent Sightings for the given date range`)
     $('.container').append($stats);
     let $table = $('<table>');
     $table.html(
