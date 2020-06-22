@@ -1,5 +1,3 @@
-# joshua-agee.github.io
-
 # [NYC Rodent Sightings](https://joshua-agee.github.io/ratMap/)
 
 ## NYC Rodent Sightings
