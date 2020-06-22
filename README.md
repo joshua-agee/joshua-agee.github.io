@@ -14,7 +14,7 @@ This data portal comprises a vast wealth of information about municipal activiti
 
 Rodent complaints are a service available through the city's 311 portal where residents can report problems and get information.  The data for pest control includes calls for both mice and rats, and for conditions that promote their infestation.  I opted to use only data where the description was "Rat Sighting", excluding "Mouse Sighting" and others.  This data includes a great deal of information as shown here:
 
-'''javascript
+```javascript
 {
     "unique_key": "46477011",
     "created_date": "2020-06-15T00:48:55.000",
@@ -46,7 +46,7 @@ Rodent complaints are a service available through the city's 311 portal where re
       "human_address": "{\"address\": \"\", \"city\": \"\", \"state\": \"\", \"zip\": \"\"}"
     }
   }
-'''
+```
 
 ## Methods
 To summarize this information, I extracted date and borough from the returned JSON and added it to an array, that I then looped over to count the occurrences by borough, by date.  The summary data was then looped over to build the HTML table that displays the results.  I then added filters by borough as clickable divs on the page which trigger a re-query from the API using the borough as a filter. The returned results are again summarized and table built.
