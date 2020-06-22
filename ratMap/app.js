@@ -39,7 +39,7 @@ const getData = (...args) =>{
             };
     } 
 
- 
+
     if (args.length == 3) {
         url = baseGeoJSONdataURL+`borough=${theBoroughs[args[2]]}&%24where=created_Date%20between%20%27${args[0]}T00%3A00%3A00%27%20and%20%27${args[1]}T23%3A59%3A00%27&%24limit=50000&%24%24app_token=${ratMapAppToken}`;
         $.ajax({
