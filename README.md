@@ -1,6 +1,6 @@
 # Joshua Agee
 ## Software Developer
-### Contact : joshua.agee@protonmail.com [LinkedIn](https://www.linkedin.com/in/joshua-j-agee/)
+### Contact : joshua.agee@protonmail.com [LinkedIn](https://www.linkedin.com/in/joshua-j-agee/) [Resume](#)
 
 ### Projects from Software Engineering Immersive at General Assembly
 
