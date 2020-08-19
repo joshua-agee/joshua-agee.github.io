@@ -60,7 +60,6 @@ const getData = (...args) =>{
                     );
                     
                 });
-               
             }), (error) => {
                 console.log(error);
             };
@@ -152,15 +151,4 @@ const makeBoroughDateCountTable = (arr) =>{
     $('.container').append($table);
     
 }
-
-
-
-//on load set event listeners
-$(()=>{
-    //moved to index. for proper map loading.
-    
-    
-    
-})
-
 
